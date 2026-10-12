@@ -15,12 +15,52 @@
   - [x] Mount in `app/page.tsx` and verify with clean Next.js build.
   - [x] STOP for User Review.
 
-- [x] **Phase 3: Featured Saree Categories Grid**
-  - [x] Generate 6 editorial portrait category images with authentic Indian styling (`category-banarasi.png`, `category-kanchipuram.png`, `category-chanderi.png`, `category-bridal.png`, `category-bandhani.png`, `category-ready.png`).
-  - [x] Implement `components/categories/CategoriesGrid.tsx` with responsive 2-col/3-col layout, luxury badges, weave origin, and hover zoom.
-  - [x] Mount in `app/page.tsx` and verify with clean Next.js 16 build.
+- [x] **Phase 3: Curated Silk Categories Showcase (Farco-Style Modern Carousel)**
+  - [x] Researched and extracted Farco website's exact category architecture (`https://farco-website-eta.vercel.app/`).
+  - [x] Upgraded from a static grid to a smooth horizontal swipe/scroll carousel slider (`snap-x snap-mandatory`).
+  - [x] Implemented Farco circular arrow navigation buttons (`ChevronLeft` / `ChevronRight`) with bounds detection (`canScrollLeft`, `canScrollRight`).
+  - [x] Styled sleek modern category cards with rounded square image frames (`rounded-2xl sm:rounded-3xl`), drop shadows, subtle border highlights, and hover zoom (`group-hover:scale-108`).
+  - [x] Added authentic Indian saree categories: Banarasi Katan Silk, Kanchipuram Silk, Chanderi & Organza, Bridal Lehengas, Bandhani & Gharchola, Paithani Silks, and Ready to Ship Silks.
+  - [x] Implemented mobile progress indicator bar and Farco-style pill CTA button ("View All Collections →").
+  - [x] Tested and verified with clean Turbopack build (`npm run build` - 0 errors).
   - [x] STOP for User Review.
 
-- [ ] **Phase 4: 6 Saree Product Showcase with Authentic Imagery** (Will begin after Phase 3 approval)
-- [ ] **Phase 5: Heritage & Artisan Craftsmanship Banner** (Will begin after Phase 4 approval)
-- [ ] **Phase 6: Luxury Footer & Responsive Mobile Bar** (Will begin after Phase 5 approval)
+- [x] **Phase 4: 6 Saree Product Showcase with Authentic Imagery (Farco Modern Architecture)**
+  - [x] Created `public/products/` with 12 high-resolution photography assets (6 main draping portraits + 6 intricate zari/pallu hover close-ups).
+  - [x] Implemented `components/products/ProductShowcase.tsx`:
+    - Farco asymmetric header with gold line eyebrow, serif title, description, and "View All Bestsellers →".
+    - Interactive category filter tabs: All Masterpieces, Banarasi Silks, Kanchipuram, Paithani, Bridal Lehengas, Bandhani & Festive, Chanderi & Organza.
+    - Responsive 2-column (mobile) & 3-column (desktop/tablet) product grid.
+    - Dual-image hover swap & zoom effect (`object-top` drape transitions smoothly into `object-center` zari detail).
+    - Top badges: Certified Silk Mark / Bridal Couture pill + Discount % pill.
+    - Interactive wishlist heart toggle with instant fill state.
+    - Weave origin tag, serif title, star rating with review counts.
+    - Pricing in ₹ INR with formatted Indian number system and strikethrough original price.
+    - Circular quick "Add to Bag" action button with active checkmark feedback.
+    - Farco bottom pill button: "Explore All 500+ Handloom Sarees →".
+  - [x] Mounted in `app/page.tsx`.
+  - [x] Verified via clean Next.js 16 Turbopack build (`npm run build` - 0 errors).
+  - [x] STOP for User Review.
+
+- [x] **Phase 5: Heritage & Artisan Craftsmanship Banner**
+  - [x] Created `public/heritage/` high-resolution visual assets.
+  - [x] Implemented `components/heritage/HeritageSection.tsx`:
+    - Brand storytelling narrative celebrating generational master weavers of Varanasi, Kanchipuram, and Paithan.
+    - 3 Luxury Trust Pillars: Silk Mark Certified Purity, Real Zari Guarantee, Direct Weaver Guild Patronage.
+    - Royal Stats Counter Bar: 25+ Years of Trust, 500+ Master Looms, 45,000+ Royal Brides, 100% Silk Mark.
+    - Right-column editorial palace montage with play button and artisan spotlight.
+    - Accessible Interactive Modal: "Book Virtual Bridal Concierge" appointment form with confirmation state & WhatsApp instant link.
+  - [x] Mounted in `app/page.tsx`.
+  - [x] Verified via clean Next.js 16 Turbopack build (`npm run build` - 0 errors).
+  - [x] STOP for User Review.
+
+- [x] **Phase 6: Luxury Multi-Tier Footer & Mobile Sticky Bar**
+  - [x] Implemented `components/footer/Footer.tsx`:
+    - Tier 1: Royal VIP Privé Newsletter subscription strip with instant feedback state.
+    - Tier 2: 4-Column directory (Brand Insignia & Legacy Story, Curated Silk Collections, Client Concierge & Authenticity, Flagship Boutiques in Varanasi & Jaipur).
+    - Tier 3: Quality Trust Seals (Silk Mark, Pure Zari, Free Insured Shipping), payment badges (UPI, Visa, Mastercard, RuPay, NetBanking), and copyright.
+  - [x] Implemented `components/footer/MobileBottomNav.tsx`:
+    - Responsive floating/sticky bottom bar on mobile (`md:hidden`) with Home, Categories, WhatsApp direct chat trigger, Wishlist, and Shopping Bag.
+  - [x] Mounted in `app/layout.tsx`.
+  - [x] Verified via clean Next.js 16 Turbopack build (`npm run build` - 0 errors).
+  - [x] STOP for User Review.

@@ -45,7 +45,7 @@ export function MainHeader({
           className="flex items-center gap-2.5 sm:gap-3.5 group flex-shrink-0"
           aria-label="Tarun Sari & Lehenga Home"
         >
-          <div className="w-9 h-11 sm:w-11 sm:h-13 relative flex-shrink-0 transition-transform duration-300 group-hover:scale-105">
+          <div className="w-11 h-13 sm:w-13 sm:h-15 relative flex-shrink-0 transition-transform duration-300 group-hover:scale-105">
             <Image
               src="/logo/logo-mark.png"
               alt="Tarun Sari & Lehenga Insignia"

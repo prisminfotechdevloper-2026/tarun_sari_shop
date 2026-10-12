@@ -1,5 +1,5 @@
 import React from "react";
-import { Sparkles, ShieldCheck, Truck, Crown, PhoneCall, Gem } from "lucide-react";
+import { Award, ShieldCheck, Truck, Crown, PhoneCall, Gem } from "lucide-react";
 
 export function AnnouncementBar() {
   const highlights = [
@@ -20,7 +20,7 @@ export function AnnouncementBar() {
       text: "100% Authentic Handcrafted Weaves",
     },
     {
-      icon: <Sparkles className="w-3.5 h-3.5 text-[#C69A52] flex-shrink-0" />,
+      icon: <Award className="w-3.5 h-3.5 text-[#C69A52] flex-shrink-0" />,
       text: "Direct from Master Weavers of Varanasi & Kanchipuram",
     },
     {

@@ -1,120 +1,140 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useRef, useState, useEffect, useCallback } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, Gem, Sparkles } from "lucide-react";
+import { ChevronLeft, ChevronRight, ArrowRight } from "lucide-react";
 
-export interface CategoryCardData {
+export interface SareeCategory {
   id: string;
-  title: string;
-  origin: string;
+  name: string;
+  tag: string;
   count: string;
   image: string;
   href: string;
   badge?: string;
-  filter: "all" | "silk" | "bridal" | "lightweight" | "ready";
-  isPopular?: boolean;
 }
 
-const CATEGORIES_DATA: CategoryCardData[] = [
+export const SAREE_CATEGORIES: SareeCategory[] = [
   {
     id: "banarasi",
-    title: "Banarasi Katan Silk",
-    origin: "Varanasi Master Looms",
+    name: "Banarasi Katan Silk",
+    tag: "Varanasi Pure Zari",
     count: "180+ Designs",
     image: "/categories/category-banarasi.png",
     href: "#banarasi-silk",
-    badge: "Silk Mark Certified",
-    filter: "silk",
-    isPopular: true,
+    badge: "Silk Mark",
   },
   {
     id: "kanchipuram",
-    title: "Kanchipuram Pure Zari",
-    origin: "Temple Korvai Borders",
+    name: "Kanchipuram Silk",
+    tag: "Temple Korvai Borders",
     count: "140+ Designs",
     image: "/categories/category-kanchipuram.png",
     href: "#kanchipuram",
-    badge: "Pure Gold Zari",
-    filter: "silk",
+    badge: "Pure Zari",
   },
   {
     id: "chanderi",
-    title: "Chanderi & Organza",
-    origin: "Lightweight Sheer Weaves",
+    name: "Chanderi & Organza",
+    tag: "Lightweight Weaves",
     count: "95+ Designs",
     image: "/categories/category-chanderi.png",
     href: "#chanderi-organza",
-    badge: "Summer Festive",
-    filter: "lightweight",
   },
   {
     id: "bridal-lehengas",
-    title: "Bridal Lehengas",
-    origin: "Heirloom Velvet & Zardozi",
+    name: "Bridal Lehengas",
+    tag: "Zardozi & Velvet",
     count: "60+ Coutures",
     image: "/categories/category-bridal.png",
     href: "#bridal-lehengas",
     badge: "Royal Bridal",
-    filter: "bridal",
-    isPopular: true,
   },
   {
     id: "bandhani",
-    title: "Bandhani & Gharchola",
-    origin: "Jaipur Heritage Tie & Dye",
+    name: "Bandhani & Gharchola",
+    tag: "Jaipur Heritage Tie & Dye",
     count: "85+ Designs",
     image: "/categories/category-bandhani.png",
     href: "#bandhani",
-    badge: "Handcrafted Gota",
-    filter: "bridal",
+  },
+  {
+    id: "paithani",
+    name: "Paithani Silks",
+    tag: "Peacock Pallu Weaves",
+    count: "75+ Designs",
+    image: "/categories/category-paithani.png",
+    href: "#paithani-silk",
+    badge: "Heritage",
   },
   {
     id: "ready-to-ship",
-    title: "Ready to Ship Silks",
-    origin: "24-Hour Express Dispatch",
+    name: "Ready to Ship Silks",
+    tag: "Express Dispatch",
     count: "120+ In Stock",
     image: "/categories/category-ready.png",
     href: "#ready-to-ship",
-    badge: "Express Shipping",
-    filter: "ready",
+    badge: "24h Dispatch",
   },
 ];
 
-const FILTER_TABS = [
-  { id: "all", label: "All Collections" },
-  { id: "silk", label: "Pure Handloom Silks" },
-  { id: "bridal", label: "Bridal & Festive" },
-  { id: "lightweight", label: "Chanderi & Organza" },
-  { id: "ready", label: "Ready to Ship" },
-];
-
 export function CategoriesGrid() {
-  const [activeFilter, setActiveFilter] = useState("all");
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const [canScrollLeft, setCanScrollLeft] = useState(false);
+  const [canScrollRight, setCanScrollRight] = useState(true);
+  const [scrollProgress, setScrollProgress] = useState(0);
 
-  const filteredCategories = CATEGORIES_DATA.filter(
-    (cat) => activeFilter === "all" || cat.filter === activeFilter
-  );
+  const checkScroll = useCallback(() => {
+    const el = scrollRef.current;
+    if (!el) return;
+    setCanScrollLeft(el.scrollLeft > 10);
+    setCanScrollRight(el.scrollLeft < el.scrollWidth - el.clientWidth - 10);
+    const maxScroll = el.scrollWidth - el.clientWidth;
+    if (maxScroll > 0) {
+      setScrollProgress((el.scrollLeft / maxScroll) * 100);
+    }
+  }, []);
+
+  useEffect(() => {
+    const el = scrollRef.current;
+    if (!el) return;
+    checkScroll();
+    el.addEventListener("scroll", checkScroll, { passive: true });
+    window.addEventListener("resize", checkScroll);
+    return () => {
+      el.removeEventListener("scroll", checkScroll);
+      window.removeEventListener("resize", checkScroll);
+    };
+  }, [checkScroll]);
+
+  const handleScroll = (direction: "left" | "right") => {
+    const el = scrollRef.current;
+    if (!el) return;
+    const scrollAmount = el.clientWidth * 0.75;
+    el.scrollBy({
+      left: direction === "left" ? -scrollAmount : scrollAmount,
+      behavior: "smooth",
+    });
+  };
 
   return (
     <section
       id="categories"
       aria-label="Shop by Saree Category"
-      className="w-full bg-white py-12 sm:py-16 md:py-24 relative overflow-hidden border-b border-[#E9DFD1]"
+      className="w-full bg-[#FCFAF7] py-12 sm:py-16 md:py-24 relative overflow-hidden border-b border-[#E9DFD1]/80 select-none"
     >
       <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-12 relative z-10">
         
-        {/* Header (Farco Architecture: Asymmetric Left Head & Right Link) */}
-        <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-8 sm:mb-12 gap-4 sm:gap-6">
-          <div className="space-y-1 sm:space-y-2.5">
+        {/* Section Header (Farco Architecture: Left Heading & Right Carousel Arrows) */}
+        <div className="flex items-end justify-between mb-6 sm:mb-10 lg:mb-12 gap-4">
+          <div className="space-y-1.5 sm:space-y-2.5">
             
             {/* Eyebrow */}
             <div className="flex items-center gap-2">
               <span className="w-5 sm:w-6 h-[1.5px] bg-[#C69A52]" />
-              <span className="text-[10px] sm:text-xs font-bold uppercase tracking-[0.22em] sm:tracking-[0.26em] text-[#C69A52] flex items-center gap-1.5">
-                <Gem className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-[#C69A52]" />
-                Curated Silk Traditions
+              <span className="text-[10px] sm:text-xs font-bold uppercase tracking-[0.24em] text-[#C69A52]">
+                CURATED SILK COLLECTIONS
               </span>
             </div>
 
@@ -125,116 +145,106 @@ export function CategoriesGrid() {
 
             {/* Subtitle */}
             <p className="text-gray-600 text-xs sm:text-base max-w-xl font-normal leading-relaxed line-clamp-2 sm:line-clamp-none">
-              Explore our iconic handloom saree traditions, celebrated for pure zari brocades, generational craftsmanship, and certified Silk Mark authenticity.
+              Explore our handcrafted pure silk sarees, sculpted with certified Silk Mark authenticity and centuries-old royal Indian heritage.
             </p>
           </div>
 
-          {/* Right Header Link */}
-          <Link
-            href="#all-sarees"
-            className="group inline-flex items-center gap-2 self-start sm:self-end text-xs sm:text-sm font-semibold text-[#8F1028] hover:text-[#65091B] transition-colors pb-0.5 sm:pb-1 border-b border-[#8F1028]/20 hover:border-[#8F1028]"
-          >
-            <span>View All Collections</span>
-            <ArrowRight className="w-3.5 h-3.5 sm:w-4 sm:h-4 transition-transform duration-300 group-hover:translate-x-1" />
-          </Link>
-        </div>
-
-        {/* Interactive Filter Pills */}
-        <div className="flex items-center gap-2 sm:gap-3 overflow-x-auto no-scrollbar pb-2 mb-8 sm:mb-10">
-          {FILTER_TABS.map((tab) => {
-            const isActive = activeFilter === tab.id;
-            return (
-              <button
-                key={tab.id}
-                type="button"
-                onClick={() => setActiveFilter(tab.id)}
-                className={`whitespace-nowrap px-4 sm:px-5 py-2 rounded-full text-xs sm:text-sm font-medium transition-all duration-200 cursor-pointer ${
-                  isActive
-                    ? "bg-[#8F1028] text-white shadow-sm"
-                    : "bg-[#FAF4EB] text-[#292421] hover:bg-[#F2E7D7] border border-[#E9DFD1]/80"
-                }`}
-              >
-                {tab.label}
-              </button>
-            );
-          })}
-        </div>
-
-        {/* 6 Modern Category Cards Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6 lg:gap-8">
-          {filteredCategories.map((item) => (
-            <Link
-              key={item.id}
-              href={item.href}
-              className="group relative aspect-[3/4] sm:aspect-[4/5] rounded-2xl overflow-hidden bg-[#FAF0E7] border border-[#E9DFD1] hover:border-[#C69A52] shadow-sm hover:shadow-2xl transition-all duration-500 flex flex-col justify-end"
+          {/* Carousel Arrow Controls (Farco Interactive Slider) */}
+          <div className="flex items-center gap-1.5 sm:gap-3 shrink-0">
+            <button
+              type="button"
+              onClick={() => handleScroll("left")}
+              disabled={!canScrollLeft}
+              aria-label="Scroll categories left"
+              className={`w-9 h-9 sm:w-11 sm:h-11 rounded-full border border-[#8F1028]/15 flex items-center justify-center transition-all cursor-pointer ${
+                canScrollLeft
+                  ? "bg-white text-[#8F1028] hover:bg-[#8F1028] hover:text-white hover:border-[#8F1028] shadow-sm active:scale-95"
+                  : "bg-white/40 text-gray-300 border-gray-200 cursor-not-allowed opacity-40"
+              }`}
             >
-              {/* Category Photography with Smooth Slow Zoom */}
-              <div className="absolute inset-0 w-full h-full overflow-hidden">
+              <ChevronLeft className="w-4 h-4 sm:w-5 sm:h-5" />
+            </button>
+            <button
+              type="button"
+              onClick={() => handleScroll("right")}
+              disabled={!canScrollRight}
+              aria-label="Scroll categories right"
+              className={`w-9 h-9 sm:w-11 sm:h-11 rounded-full border border-[#8F1028]/15 flex items-center justify-center transition-all cursor-pointer ${
+                canScrollRight
+                  ? "bg-white text-[#8F1028] hover:bg-[#8F1028] hover:text-white hover:border-[#8F1028] shadow-sm active:scale-95"
+                  : "bg-white/40 text-gray-300 border-gray-200 cursor-not-allowed opacity-40"
+              }`}
+            >
+              <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5" />
+            </button>
+          </div>
+        </div>
+
+        {/* Farco Smooth Horizontal Scrollable Category Carousel */}
+        <div
+          ref={scrollRef}
+          className="flex gap-3 sm:gap-5 md:gap-6 overflow-x-auto no-scrollbar scroll-smooth snap-x snap-mandatory py-2 -mx-4 px-4 sm:-mx-6 sm:px-6 lg:-mx-12 lg:px-12"
+          style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+        >
+          {SAREE_CATEGORIES.map((cat) => (
+            <Link
+              key={cat.id}
+              href={cat.href}
+              className="group flex-shrink-0 w-[140px] sm:w-[180px] md:w-[210px] lg:w-[230px] snap-start flex flex-col items-center text-center p-2.5 sm:p-4 md:p-5 rounded-2xl sm:rounded-3xl bg-white border border-[#8F1028]/10 hover:border-[#8F1028]/35 hover:shadow-xl transition-all duration-300 active:scale-[0.98]"
+            >
+              {/* Category Image Frame */}
+              <div className="relative w-full aspect-square rounded-xl sm:rounded-2xl bg-[#FAF0E7]/60 mb-2.5 sm:mb-3.5 overflow-hidden border border-[#8F1028]/5 group-hover:bg-[#FAF0E7] transition-colors flex items-center justify-center">
                 <Image
-                  src={item.image}
-                  alt={item.title}
+                  src={cat.image}
+                  alt={cat.name}
                   fill
-                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                  className="object-cover object-center group-hover:scale-106 transition-transform duration-700 ease-out"
+                  sizes="(max-width: 640px) 140px, (max-width: 768px) 180px, 230px"
+                  className="object-cover object-top group-hover:scale-108 transition-transform duration-500 drop-shadow-2xs"
                 />
 
-                {/* Soft gradient at bottom so the card floats crisply */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent opacity-80 group-hover:opacity-90 transition-opacity duration-300" />
+                {/* Subtle Badge */}
+                {cat.badge && (
+                  <span className="absolute top-2 right-2 bg-[#8F1028]/95 text-white text-[9px] font-bold px-2 py-0.5 rounded-full backdrop-blur-xs tracking-wider uppercase shadow-2xs border border-[#C69A52]/30">
+                    {cat.badge}
+                  </span>
+                )}
               </div>
 
-              {/* Top-Right Badge */}
-              {item.badge && (
-                <div className="absolute top-3.5 right-3.5 sm:top-4 sm:right-4 z-10">
-                  <span
-                    className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider shadow-sm backdrop-blur-md ${
-                      item.isPopular
-                        ? "bg-[#8F1028]/95 text-white border border-[#C69A52]/40"
-                        : "bg-white/90 text-[#1A030C] border border-[#E9DFD1]"
-                    }`}
-                  >
-                    {item.isPopular && <Sparkles className="w-2.5 h-2.5 text-[#E6D0A7]" />}
-                    {item.badge}
-                  </span>
-                </div>
-              )}
+              {/* Category Title */}
+              <h3 className="font-serif font-bold text-xs sm:text-base md:text-lg text-[#1A030C] group-hover:text-[#8F1028] transition-colors line-clamp-1 capitalize tracking-wide w-full px-0.5">
+                {cat.name}
+              </h3>
 
-              {/* Floating Bottom Luxury Glass Card (Modern Farco Look) */}
-              <div className="relative z-10 m-3.5 sm:m-4 bg-white/95 backdrop-blur-md rounded-xl p-4 sm:p-4.5 border border-[#E9DFD1] shadow-lg group-hover:border-[#C69A52]/80 group-hover:bg-white transition-all duration-300 flex items-center justify-between gap-3">
-                <div className="flex-1 min-w-0">
-                  
-                  {/* Origin */}
-                  <span className="text-[10px] font-bold tracking-[0.18em] text-[#C69A52] uppercase block truncate mb-0.5">
-                    {item.origin}
-                  </span>
+              {/* Tag / Item Count */}
+              <span className="text-[10px] sm:text-[11px] text-[#C69A52] font-semibold tracking-wider uppercase mt-1">
+                {cat.count}
+              </span>
 
-                  {/* Title */}
-                  <h3 className="font-serif text-base sm:text-lg font-bold text-[#1A030C] group-hover:text-[#8F1028] transition-colors leading-snug truncate">
-                    {item.title}
-                  </h3>
-
-                  {/* Count */}
-                  <span className="text-[11px] text-gray-500 font-medium block mt-0.5">
-                    {item.count}
-                  </span>
-                </div>
-
-                {/* Circular Action Arrow */}
-                <div className="w-9 h-9 rounded-full bg-[#FAF4EB] border border-[#E9DFD1] flex items-center justify-center text-[#8F1028] group-hover:bg-[#8F1028] group-hover:text-white transition-all duration-300 flex-shrink-0 shadow-2xs group-hover:scale-105">
-                  <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5" />
-                </div>
-              </div>
-
+              {/* Farco Hover Explore Action */}
+              <span className="hidden sm:inline-flex items-center gap-1 text-[11px] sm:text-xs font-semibold text-[#8F1028]/70 group-hover:text-[#8F1028] mt-1.5 transition-colors">
+                Explore <ArrowRight className="w-3 h-3 group-hover:translate-x-1 transition-transform" />
+              </span>
             </Link>
           ))}
         </div>
 
-        {/* Farco-style Bottom CTA */}
-        <div className="mt-10 sm:mt-14 text-center">
+        {/* Farco Mobile Scroll Progress Indicator */}
+        <div className="sm:hidden flex items-center justify-center gap-1.5 mt-5">
+          <div className="w-20 h-1 bg-[#8F1028]/10 rounded-full overflow-hidden">
+            <div
+              className="h-full bg-[#8F1028] rounded-full transition-all duration-100 ease-out"
+              style={{ width: `${Math.max(20, scrollProgress)}%` }}
+            />
+          </div>
+        </div>
+
+        {/* Farco Bottom CTA */}
+        <div className="mt-8 sm:mt-12 text-center">
           <Link
             href="#all-sarees"
-            className="inline-flex items-center gap-2.5 px-7 sm:px-9 py-3 sm:py-3.5 rounded-full bg-[#8F1028] text-white font-semibold text-xs sm:text-sm tracking-wide shadow-md hover:shadow-lg hover:bg-[#65091B] transition-all duration-300 group cursor-pointer"
+            className="inline-flex items-center gap-2.5 px-7 sm:px-9 py-3 sm:py-3.5 rounded-full bg-[#8F1028] text-white font-bold text-xs sm:text-sm tracking-wide shadow-md hover:bg-[#65091B] hover:shadow-lg transition-all duration-300 active:scale-95 group cursor-pointer"
           >
-            <span>Explore All 500+ Handloom Sarees</span>
+            <span>View All Collections</span>
             <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
           </Link>
         </div>

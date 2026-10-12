@@ -2,7 +2,6 @@
 
 import React from "react";
 import Link from "next/link";
-import { Sparkles } from "lucide-react";
 
 export interface CategoryItem {
   name: string;
@@ -28,6 +27,7 @@ export function CategoryNav() {
       <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-10">
         <nav
           className="flex items-center justify-center lg:justify-start gap-6 lg:gap-9 py-2.5 overflow-x-auto no-scrollbar"
+          style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
           aria-label="Category Navigation"
         >
           {CATEGORIES.map((cat) => (
@@ -40,8 +40,7 @@ export function CategoryNav() {
 
                 {/* Badge tags */}
                 {cat.isHot && (
-                  <span className="inline-flex items-center gap-0.5 text-[9.5px] font-bold px-1.5 py-0.5 rounded-full bg-[#8F1028] text-white uppercase tracking-wider scale-90 group-hover:scale-95 transition-transform">
-                    <Sparkles className="w-2.5 h-2.5" />
+                  <span className="inline-flex items-center text-[9.5px] font-bold px-1.5 py-0.5 rounded-full bg-[#8F1028] text-white uppercase tracking-wider scale-90 group-hover:scale-95 transition-transform">
                     Bridal
                   </span>
                 )}

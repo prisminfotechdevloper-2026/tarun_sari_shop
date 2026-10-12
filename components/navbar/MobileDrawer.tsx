@@ -9,7 +9,6 @@ import {
   ChevronRight,
   Phone,
   Video,
-  Sparkles,
   ShoppingBag,
   Heart,
   MessageCircle,
@@ -120,8 +119,8 @@ export function MobileDrawer({ isOpen, onClose }: MobileDrawerProps) {
                       {cat.name}
                     </span>
                     {cat.isHot && (
-                      <span className="inline-flex items-center gap-0.5 text-[8.5px] font-bold px-1.5 py-0.2 rounded-full bg-[#8F1028] text-white">
-                        <Sparkles className="w-2 h-2" /> Bridal
+                      <span className="inline-flex items-center text-[8.5px] font-bold px-1.5 py-0.2 rounded-full bg-[#8F1028] text-white">
+                        Bridal
                       </span>
                     )}
                   </div>
