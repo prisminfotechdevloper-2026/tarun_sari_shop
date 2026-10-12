@@ -18,6 +18,15 @@ export const metadata: Metadata = {
   title: "Tarun Sari & Lehenga | Pure Handloom Banarasi, Kanjivaram & Bridal Wear",
   description:
     "Explore authentic royal Indian handloom sarees and bridal lehengas at Tarun Sari Shop. Certified pure silk, master weaver creations, and global delivery.",
+  icons: {
+    icon: [
+      { url: "/favicon.ico?v=2" },
+      { url: "/icon.png?v=2", sizes: "192x192", type: "image/png" },
+    ],
+    apple: [
+      { url: "/apple-icon.png?v=2", sizes: "180x180", type: "image/png" },
+    ],
+  },
 };
 
 export default function RootLayout({
